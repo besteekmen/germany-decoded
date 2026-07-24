@@ -1,51 +1,36 @@
 # 🇩🇪 Germany Decoded
 
-> An AI-powered assistant helping English-speaking residents understand German rights, responsibilities, and everyday procedures using trusted official sources.
-
----
-
-## Overview
-
-Moving to or living in Germany often means navigating complex legal and administrative systems.
-
-Important information is frequently:
-
-- Available primarily in German.
-- Spread across many different official websites.
-- Difficult to interpret without knowledge of German laws and procedures.
-
-Germany Decoded aims to make this information more accessible by using AI to retrieve trusted German legal and governmental sources and explain them clearly in English.
-
-The goal is not to replace lawyers or official authorities, but to help people better understand the systems they interact with every day.
+> An AI-powered legal information assistant that helps English-speaking residents of Germany understand their rights and obligations using official German legal and governmental sources.
 
 ---
 
 ## Motivation
 
-Many everyday situations create uncertainty:
+Living in Germany often means navigating legal and administrative information that is primarily available in German and spread across many official websites. While large language models can provide helpful answers, they may not always rely on authoritative or up-to-date sources.
 
-- A landlord announces renovations.
-- A tenant receives a utility bill dispute.
-- An employee has questions about workplace rights.
-- Someone receives an official letter they cannot understand.
-- A consumer wants to know their rights after a purchase.
+This project aims to make trusted German legal information more accessible by retrieving relevant official documents and explaining them in clear English.
 
-People often know their situation, but they do not know which laws, authorities, or procedures apply.
+The assistant is designed to answer practical questions related to everyday life in Germany while always citing the sources used to generate its responses.
 
-Germany Decoded helps bridge this gap.
+Examples include questions about:
+
+* Housing and tenancy
+* Employment rights
+* Consumer protection
+* Contracts and debt
+* Official procedures
+* Everyday civil law
 
 ---
 
 ## Project Goals
 
-The project aims to:
-
-- Retrieve information from trusted German legal and governmental sources.
-- Explain German information in clear English.
-- Provide source citations.
-- Communicate uncertainty when evidence is insufficient.
-- Suggest possible next steps.
-- Demonstrate a complete Retrieval-Augmented Generation (RAG) system.
+* Retrieve information from trusted German legal and governmental sources.
+* Explain legal information in clear English.
+* Cite every relevant source.
+* Communicate uncertainty when information is incomplete.
+* Suggest practical next steps.
+* Demonstrate a complete Retrieval-Augmented Generation (RAG) pipeline.
 
 ---
 
@@ -53,42 +38,72 @@ The project aims to:
 
 🚧 This project is currently under active development.
 
-The initial focus is building a reliable knowledge ingestion and retrieval pipeline.
+The initial focus is building a reliable knowledge ingestion and retrieval pipeline before adding advanced agent capabilities.
 
 ---
 
 ## Planned Features
 
-- [ ] Knowledge ingestion pipeline
-- [ ] Official German source collection
-- [ ] Vector database with pgvector
-- [ ] Retrieval-Augmented Generation pipeline
-- [ ] English answers from German sources
-- [ ] Source citations
-- [ ] Confidence estimation
-- [ ] Suggested next steps
-- [ ] Evaluation pipeline
-- [ ] Monitoring and tracing
-- [ ] Official web search fallback
-- [ ] Document explanation features
+* [ ] Knowledge ingestion pipeline
+* [ ] Vector database with pgvector
+* [ ] Retrieval-Augmented Generation (RAG)
+* [ ] English responses from German source material
+* [ ] Source citations
+* [ ] Confidence estimation
+* [ ] Suggested next steps
+* [ ] Evaluation pipeline
+* [ ] Monitoring and tracing
+* [ ] Official web search fallback
 
 ---
 
 ## Example Interaction (Planned)
 
-### User
+**Question**
 
-> My landlord wants to renovate my apartment next week. Can they do this?
+> My landlord wants to renovate my apartment next week. Is this allowed?
 
-### Germany Decoded
+**Assistant**
 
-The assistant:
+* Retrieves relevant German legislation.
+* Retrieves official government guidance.
+* Explains the applicable rules in English.
+* Cites every source used.
+* Indicates confidence.
+* Suggests possible next steps.
+* Reminds the user that the response is legal information rather than legal advice.
 
-1. Retrieves relevant German legal sources.
-2. Finds applicable regulations.
-3. Explains them in English.
-4. Provides citations.
-5. Shows confidence level.
-6. Suggests possible next steps.
+---
 
-Example:
+## Tech Stack
+
+* Python
+* uv
+* GitHub Codespaces
+* PostgreSQL
+* pgvector
+* OpenAI API
+* OpenTelemetry
+* VS Code
+
+---
+
+## Repository Documentation
+
+* **PROJECT_BLUEPRINT.md** — Overall vision, design decisions, and project scope.
+* **TODO.md** — Development roadmap and milestones.
+* **DEVLOG.md** — Engineering journal documenting project progress.
+
+---
+
+## Disclaimer
+
+This project provides legal information based on trusted German legal and governmental sources.
+
+It is **not** a substitute for professional legal advice and should not be relied upon for legal decisions. Users should consult a qualified legal professional when appropriate.
+
+---
+
+## License
+
+MIT License
