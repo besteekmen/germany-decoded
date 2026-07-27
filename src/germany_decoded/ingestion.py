@@ -1,29 +1,38 @@
 import requests
 from lxml import etree
 
-LAW_INDEX_URL = "https://www.gesetze-im-internet.de/gii-toc.xml"
+from gesetze_im_internet import toc
 
-def load_law_index():
-    """Download and parse the official German law index."""
-    response = requests.get(LAW_INDEX_URL, timeout=30)
-    response.raise_for_status()
-
-    root = etree.fromstring(response.content)
-    return root
 
 def load_documents():
-    """Load all knowledge base documents."""
+    """
+    Load selected German law sections.
+
+    Source:
+    https://www.gesetze-im-internet.de/
+    """
+
+    bgb = toc("Bürgerliches Gesetzbuch")
+
+    sections = [
+        535,  # Mietvertrag
+        536,  # Mietminderung
+        537,  # Entrichtung der Miete
+    ]
 
     documents = []
 
-    # TODO: #1 Add sources here one by one
-    
-    return documents
+    for number in sections:
+        section = bgb(number)
 
-def build_index(documents):
-    index = Index(
-        text_fields=["question", "section", "answer"],
-        keyword_fields=["course"]
-    )
-    index.fit(documents)
-    return index
+        documents.append(
+            {
+                "title": f"BGB § {number}",
+                "content": str(section),
+                "source": section.href,
+                "law": "Bürgerliches Gesetzbuch",
+                "language": "de",
+            }
+        )
+
+    return documents

@@ -1,13 +1,41 @@
-from germany_decoded.ingestion import load_law_index
-
+from germany_decoded.ingestion import load_documents
+from germany_decoded.retrieval import search
+from germany_decoded.embeddings import create_embeddings
 
 def main():
-    print("Downloading official German law index...")
+    documents = load_documents()
 
-    root = load_law_index()
+    #print(f"Loaded {len(documents)} documents")
+    #print(documents[:5])
 
-    print("Success!")
-    print(root.tag)
+    #---
+
+    #results = search(
+    #    "Mietminderung bei Mängeln",
+    #    documents
+    #)
+    #print(results)
+
+    #---
+
+    #embeddings = create_embeddings(documents)
+    #print(embeddings.shape)
+
+    #---
+
+    embeddings = create_embeddings(documents)
+
+    results = search(
+        "Can my landlord keep my deposit?",
+        documents,
+        embeddings
+    )
+
+    for result in results:
+        print(result["title"])
+        print(result["content"][:200])
+        print(result["source"])
+        print("---")
 
 
 if __name__ == "__main__":
