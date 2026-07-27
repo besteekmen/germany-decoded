@@ -96,6 +96,16 @@ The initial focus is building a reliable knowledge ingestion and retrieval pipel
 
 ---
 
+## Data Sources
+
+Germany Decoded uses publicly available information from trusted German sources.
+
+Downloaded data is **not stored in this repository**. Instead, users generate their own local knowledge base by running the ingestion pipeline.
+
+See `SOURCES.md` for details.
+
+---
+
 ## Disclaimer
 
 This project provides legal information based on trusted German legal and governmental sources.
