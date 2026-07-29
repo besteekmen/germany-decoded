@@ -12,9 +12,11 @@ requires-python = ">=3.12"
 dependencies = [
     "gesetze-im-internet>=0.0.4",
     "lxml>=6.1.1",
+    "openai>=2.50.0",
     "python-dotenv>=1.2.2",
     "requests>=2.34.2",
     "sentence-transformers>=5.6.1",
+    "streamlit>=1.60.0",
 ]
 
 [tool.setuptools]

@@ -1,42 +1,35 @@
 from germany_decoded.ingestion import load_documents
 from germany_decoded.retrieval import search
 from germany_decoded.embeddings import create_embeddings
+from germany_decoded.prompt import build_context, build_prompt
+from germany_decoded.llm import ask_llm
+import time
 
 def main():
+    t0 = time.time()
     documents = load_documents()
+    print("Loading:", time.time() - t0)
+    print(f"Loaded {len(documents)} legal sections")
 
-    #print(f"Loaded {len(documents)} documents")
-    #print(documents[:5])
-
-    #---
-
-    #results = search(
-    #    "Mietminderung bei Mängeln",
-    #    documents
-    #)
-    #print(results)
-
-    #---
-
-    #embeddings = create_embeddings(documents)
-    #print(embeddings.shape)
-
-    #---
-
+    t0 = time.time()
     embeddings = create_embeddings(documents)
+    print("Embedding:", time.time() - t0)
 
+    question = "Can I reduce my rent because my apartment has defects?"
+
+    t0 = time.time()
     results = search(
-        "Can my landlord keep my deposit?",
+        question,
         documents,
         embeddings
     )
+    print("Search:", time.time() - t0)
 
-    for result in results:
-        print(result["title"])
-        print(result["content"][:200])
-        print(result["source"])
-        print("---")
+    context = build_context(results)
 
+    answer = ask_llm(question, context)
+
+    print(answer)
 
 if __name__ == "__main__":
     main()
