@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from germany_decoded.ingestion import load_documents
 from germany_decoded.embeddings import create_embeddings
 from germany_decoded.retrieval import search
@@ -23,19 +24,28 @@ question = st.text_input(
 )
 
 if st.button("Ask") and question:
-    results = search(
-        question,
-        documents,
-        embeddings
-    )
+    with st.spinner("Searching legal database..."):
+        t0 = time.time()
+
+        results = search(
+            question,
+            documents,
+            embeddings
+        )
+
+        st.caption(f"Search time: {time.time()-t0:.2f}s")
 
     context = build_context(results)
 
-    with st.spinner("Thinking..."):
+    with st.spinner("Generating answer..."):
+        t0 = time.time()
+
         answer = ask_llm(
             question,
-            context,
+            context
         )
+
+        st.caption(f"LLM time: {time.time()-t0:.2f}s")
 
     st.markdown("## Answer")
     st.write(answer)

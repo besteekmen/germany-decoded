@@ -3,12 +3,14 @@ from germany_decoded.retrieval import search
 from germany_decoded.embeddings import create_embeddings
 from germany_decoded.prompt import build_context, build_prompt
 from germany_decoded.llm import ask_llm
+from germany_decoded.db.save import store_documents
 import time
 
 def main():
     t0 = time.time()
     documents = load_documents()
     print("Loading:", time.time() - t0)
+    store_documents(documents)
     print(f"Loaded {len(documents)} legal sections")
 
     t0 = time.time()
