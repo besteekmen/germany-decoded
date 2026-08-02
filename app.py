@@ -1,22 +1,10 @@
 import streamlit as st
-import time
-from germany_decoded.ingestion import load_documents
-from germany_decoded.embeddings import create_embeddings
 from germany_decoded.retrieval import search
 from germany_decoded.prompt import build_context
 from germany_decoded.llm import ask_llm
-
-@st.cache_resource
-def load_resources():
-    documents = load_documents()
-    embeddings = create_embeddings(documents)
-    return documents, embeddings
-
+import time
 
 st.title("Germany Decoded 🇩🇪")
-
-with st.spinner("Loading legal knowledge..."):
-    documents, embeddings = load_resources()
 
 question = st.text_input(
     "Ask a question",
@@ -27,11 +15,7 @@ if st.button("Ask") and question:
     with st.spinner("Searching legal database..."):
         t0 = time.time()
 
-        results = search(
-            question,
-            documents,
-            embeddings
-        )
+        results = search(question)
 
         st.caption(f"Search time: {time.time()-t0:.2f}s")
 
@@ -58,4 +42,4 @@ if st.button("Ask") and question:
         st.caption(result["source"])
 
 with st.sidebar:
-    st.caption(f"Loaded {len(documents)} legal sections.")
+    st.caption("Search backend: PostgreSQL + pgvector")
