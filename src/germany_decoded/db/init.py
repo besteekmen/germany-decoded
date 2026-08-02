@@ -13,6 +13,7 @@ def init_db(drop=False):
             if drop:
                 cur.execute("""
                     DROP TABLE IF EXISTS documents;
+                    DROP TABLE IF EXISTS conversations;
                 """)
 
             cur.execute("""
@@ -29,6 +30,39 @@ def init_db(drop=False):
                     source TEXT,
                     language TEXT,
                     embedding VECTOR(384)
+                );
+            """)
+
+            cur.execute("""
+                CREATE INDEX IF NOT EXISTS documents_embedding_idx
+                ON documents
+                USING hnsw (embedding vector_cosine_ops);
+            """)
+
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS conversations (
+                    id SERIAL PRIMARY KEY,
+
+                    question TEXT NOT NULL,
+                    answer TEXT NOT NULL,
+
+                    model TEXT NOT NULL,
+
+                    instructions TEXT,
+                    context TEXT,
+                    prompt TEXT,
+
+                    prompt_tokens INTEGER,
+                    completion_tokens INTEGER,
+                    total_tokens INTEGER,
+
+                    cost DOUBLE PRECISION,
+
+                    search_time DOUBLE PRECISION,
+                    llm_time DOUBLE PRECISION,
+                    total_time DOUBLE PRECISION,
+
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
 

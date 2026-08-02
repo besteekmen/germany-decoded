@@ -1,73 +1,100 @@
 # TODO
 
-## Milestone 1 — Project Setup
+## ✅ Milestone 1 — Project Setup
 
-* [ ] Create GitHub repository
-* [ ] Initialize project with `uv`
-* [ ] Configure GitHub Codespaces
-* [ ] Configure environment variables
-* [ ] Create project structure
-* [ ] Add project documentation
+- [x] Create GitHub repository
+- [x] Initialize project with `uv`
+- [x] Configure environment variables
+- [x] Create project structure
+- [x] Add project documentation
+- [x] Configure Docker + PostgreSQL
+- [x] Configure pgvector
+- [x] Create Makefile
 
----
-
-## Milestone 2 — Knowledge Ingestion
-
-* [ ] Select first official source
-* [ ] Implement first document loader
-* [ ] Normalize documents
-* [ ] Store raw documents locally
-* [ ] Design document schema
+> Codespaces skipped for now (local WSL development).
 
 ---
 
-## Milestone 3 — Retrieval
+## ✅ Milestone 2 — Knowledge Ingestion
 
-* [ ] Chunk documents
-* [ ] Generate embeddings
-* [ ] Store vectors in PostgreSQL + pgvector
-* [ ] Implement semantic search
-* [ ] Evaluate retrieval quality
-
----
-
-## Milestone 4 — Question Answering
-
-* [ ] Connect LLM
-* [ ] Build prompts
-* [ ] Generate English answers
-* [ ] Add citations
-* [ ] Add confidence estimation
-* [ ] Add legal disclaimer
+- [x] Select first official source (BGB)
+- [x] Implement BGB loader
+- [x] Normalize legal sections
+- [ ] Add additional official sources
+- [x] Design document schema
+- [x] Build indexing pipeline
+- [x] Store documents in PostgreSQL
 
 ---
 
-## Milestone 5 — Evaluation
+## ✅ Milestone 3 — Retrieval
 
-* [ ] Retrieval evaluation
-* [ ] LLM-as-a-Judge evaluation
-* [ ] Improve chunking strategy
-* [ ] Improve prompts
-
----
-
-## Milestone 6 — Monitoring
-
-* [ ] Add tracing
-* [ ] Measure latency
-* [ ] Measure token usage
-* [ ] Measure costs
-* [ ] Build monitoring dashboard
+- [x] Generate multilingual embeddings
+- [x] Store vectors in PostgreSQL + pgvector
+- [x] Build semantic search
+- [x] Create HNSW vector index
+- [ ] Evaluate retrieval quality
 
 ---
 
-## Future Ideas
+## ✅ Milestone 4 — Question Answering
 
-* [ ] Official web search fallback
-* [ ] Conversation memory
-* [ ] Hybrid search
-* [ ] Upload German documents
-* [ ] Explain official letters
-* [ ] Deadline extraction
-* [ ] Draft response letters
-* [ ] Bureaucracy assistant
+- [x] Connect GPT-5 Mini
+- [x] Build prompt template
+- [x] Build legal instructions
+- [x] Generate English answers
+- [x] Add citations
+- [x] Add legal disclaimer
+- [ ] Add confidence estimation
+
+---
+
+## 🔄 Milestone 5 — Monitoring (Current)
+
+- [ ] Log every conversation
+- [ ] Measure latency
+- [ ] Measure token usage
+- [ ] Measure costs
+- [ ] Store conversations in PostgreSQL
+- [ ] Store user feedback
+- [ ] Build monitoring dashboard
+- [ ] Build admin dashboard
+
+---
+
+## ⏳ Milestone 6 — Evaluation
+
+- [ ] Retrieval evaluation
+- [ ] LLM-as-a-Judge
+- [ ] Improve chunking
+- [ ] Improve prompts
+- [ ] Build retrieval debugger
+
+---
+
+## ⏳ Milestone 7 — Search Improvements
+
+- [ ] Hybrid search (semantic + keyword)
+- [ ] PostgreSQL Full Text Search
+- [ ] Reranking
+
+---
+
+## 🌟 Future Features
+
+- [ ] Official web search fallback
+- [ ] Conversation memory
+- [ ] Explain official letters
+- [ ] Deadline extraction
+- [ ] Draft response letters
+- [ ] Bureaucracy assistant
+- [ ] Upload German documents
+- [ ] Multi-source legal retrieval
+
+---
+
+## 🚀 Stretch Goal
+
+- [ ] OpenTelemetry tracing
+- [ ] Grafana dashboards
+- [ ] Production observability

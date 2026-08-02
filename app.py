@@ -1,10 +1,12 @@
 import streamlit as st
-from germany_decoded.retrieval import search
-from germany_decoded.prompt import build_context
-from germany_decoded.llm import ask_llm
-import time
+from germany_decoded.assistant import Assistant
 
 st.title("Germany Decoded 🇩🇪")
+
+@st.cache_resource
+def load_assistant():
+    return Assistant()
+assistant = load_assistant()
 
 question = st.text_input(
     "Ask a question",
@@ -13,33 +15,17 @@ question = st.text_input(
 
 if st.button("Ask") and question:
     with st.spinner("Searching legal database..."):
-        t0 = time.time()
-
-        results = search(question)
-
-        st.caption(f"Search time: {time.time()-t0:.2f}s")
-
-    context = build_context(results)
-
-    with st.spinner("Generating answer..."):
-        t0 = time.time()
-
-        answer = ask_llm(
-            question,
-            context
-        )
-
-        st.caption(f"LLM time: {time.time()-t0:.2f}s")
+        result = assistant.ask(question)
 
     st.markdown("## Answer")
-    st.write(answer)
+    st.write(result["answer"])
 
     st.markdown("## Sources")
-    for result in results:
+    for source in result["sources"]:
         st.markdown(
-            f"**{result['law']} {result['section']}** — {result['title']}"
+            f"**{source['law']} {source['section']}** — {source['title']}"
         )
-        st.caption(result["source"])
+        st.caption(source["source"])
 
 with st.sidebar:
     st.caption("Search backend: PostgreSQL + pgvector")
