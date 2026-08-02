@@ -18,3 +18,6 @@ cli:
 
 app:
 	uv run streamlit run app.py
+
+monitor:
+	uv run streamlit run admin.py

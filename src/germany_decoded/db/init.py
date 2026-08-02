@@ -12,8 +12,9 @@ def init_db(drop=False):
 
             if drop:
                 cur.execute("""
-                    DROP TABLE IF EXISTS documents;
+                    DROP TABLE IF EXISTS feedbacks;
                     DROP TABLE IF EXISTS conversations;
+                    DROP TABLE IF EXISTS documents;
                 """)
 
             cur.execute("""
@@ -63,6 +64,17 @@ def init_db(drop=False):
                     total_time DOUBLE PRECISION,
 
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            """)
+
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS feedbacks (
+                    id SERIAL PRIMARY KEY,
+                    conversation_id INTEGER NOT NULL
+                        REFERENCES conversations(id)
+                        ON DELETE CASCADE,
+                    helpful BOOLEAN NOT NULL,
+                    created_at TIMESTAMP DEFAULT NOW()
                 );
             """)
 

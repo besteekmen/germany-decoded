@@ -27,6 +27,7 @@ def save_conversation(record):
                     %s,
                     %s, %s, %s
                 )
+                RETURNING id;
                 """,
                 (
                     record.question,
@@ -45,4 +46,8 @@ def save_conversation(record):
                 ),
             )
 
+            conversation_id = cur.fetchone()[0]
+
         conn.commit()
+        
+    return conversation_id

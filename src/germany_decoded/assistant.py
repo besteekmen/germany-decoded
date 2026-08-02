@@ -80,7 +80,8 @@ class Assistant:
 
         return {
             "answer": response.output_text,
-            "sources": results
+            "sources": results,
+            "conversation_id": self.last_call.id
         }
 
     def search(self, question, top_k=3):
@@ -148,5 +149,7 @@ class Assistant:
             llm_time=llm_time,
             total_time=total_time,
         )
+        conversation_id = save_conversation(call_record)
+        call_record.id = conversation_id
         self.last_call = call_record
-        save_conversation(call_record)
+        

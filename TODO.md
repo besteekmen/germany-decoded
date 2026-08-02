@@ -51,13 +51,13 @@
 
 ## 🔄 Milestone 5 — Monitoring (Current)
 
-- [ ] Log every conversation
-- [ ] Measure latency
-- [ ] Measure token usage
-- [ ] Measure costs
-- [ ] Store conversations in PostgreSQL
-- [ ] Store user feedback
-- [ ] Build monitoring dashboard
+- [x] Log every conversation
+- [x] Measure latency
+- [x] Measure token usage
+- [x] Measure costs
+- [x] Store conversations in PostgreSQL
+- [x] Store user feedback
+- [x] Build monitoring dashboard
 - [ ] Build admin dashboard
 
 ---

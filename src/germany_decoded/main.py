@@ -6,7 +6,7 @@ def main():
 
     result = assistant.ask(question)
     print(result["answer"])
-    #print(assistant.last_call)
+    #print(assistant.last_call.id)
 
 if __name__ == "__main__":
     main()

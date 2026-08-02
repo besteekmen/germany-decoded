@@ -7,7 +7,6 @@ class ConversationRecord:
     answer: str
 
     model: str
-
     instructions: str
     context: str
     prompt: str
@@ -20,6 +19,7 @@ class ConversationRecord:
     search_time: float
     llm_time: float
     total_time: float
+    id: int | None = None
     timestamp: datetime = field(default_factory=datetime.now)
 
 def calculate_cost(model, usage):
