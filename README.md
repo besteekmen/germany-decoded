@@ -40,7 +40,7 @@ Living in Germany often means navigating legal information that is:
 
 While modern large language models can produce convincing answers, they may also generate unsupported or inaccurate legal information if they are not grounded in authoritative sources.
 
-Germany Decoded addresses this problem by retrieving relevant sections from the **German Civil Code (BGB)** before generating an English explanation.
+Germany Decoded addresses this problem by retrieving relevant sections from the **German Civil Code (BGB), currently focusing on German tenancy law (§§ 535–580a)**, before generating an English explanation.
 
 Instead of asking users to search through legal texts themselves, the application combines retrieval techniques with an LLM to produce answers that are both understandable and grounded in official legislation.
 
@@ -157,7 +157,7 @@ This approach reduces hallucinations while ensuring that answers are grounded in
 
 ## 1. Knowledge Ingestion
 
-The project builds a searchable legal knowledge base from the official German Civil Code (BGB).
+The project currently builds a searchable legal knowledge base from the **German Civil Code (BGB), focusing on the tenancy law provisions (§§ 535–580a)**. This scope covers many common landlord–tenant questions and serves as the initial knowledge base for the project.
 
 During indexing, the ingestion pipeline:
 
@@ -650,8 +650,8 @@ Planned improvements include:
 
 ## Knowledge Base
 
-- Add additional official German legal and governmental sources.
-- Expand beyond the BGB into other legal domains.
+- Expand beyond the current tenancy law scope (§§ 535–580a) to additional BGB sections.
+- Add other official German legal and governmental sources.
 - Support multi-source retrieval.
 
 ## Retrieval
@@ -698,7 +698,7 @@ The application itself, dataset, architecture, implementation, and engineering d
 
 # 📜 Data Sources
 
-Germany Decoded currently uses publicly available legal information from trusted official sources.
+Germany Decoded currently indexes a curated subset of the German Civil Code (BGB), specifically the tenancy law provisions **§§ 535–580a**, obtained from **Gesetze im Internet**, the official legal portal of the German Federal Ministry of Justice. Future versions will expand the knowledge base with additional BGB sections and other official German legal sources.
 
 The current knowledge base is built from the **German Civil Code (BGB)** available through **Gesetze im Internet**, published by the German Federal Ministry of Justice.
 
