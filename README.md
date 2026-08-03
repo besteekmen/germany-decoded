@@ -86,7 +86,7 @@ The monitoring dashboard visualizes application activity using interactive chart
 
 ## 🎥 Demo Video
 
-> **Coming soon** (placeholder before submission)
+https://github.com/user-attachments/assets/7df189c6-aac9-449a-a8e8-e5a5c5e229e1
 
 A short walkthrough demonstrates:
 
