@@ -62,7 +62,7 @@
 
 ---
 
-## ⏳ Milestone 6 — Evaluation
+## ✅ Milestone 6 — Evaluation
 
 - [x] Build benchmark dataset
 - [x] Retrieval evaluation
