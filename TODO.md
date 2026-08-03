@@ -78,12 +78,12 @@
 
 ## ⏳ Milestone 7 — Product Polish
 
-- [ ] Merge Assistant + Admin
-- [ ] Admin-only navigation
-- [ ] Better dashboard visuals
+- [x] Merge Assistant + Admin
+- [x] Admin-only navigation
+- [x] Better dashboard visuals
 - [ ] Charts
 - [ ] Better branding
-- [ ] Loading animations
+- [x] Loading animations
 - [ ] Conversation history
 - [ ] Better citations
 - [ ] Deployment

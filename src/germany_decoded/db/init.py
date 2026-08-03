@@ -13,6 +13,7 @@ def init_db(drop=False):
             if drop:
                 cur.execute("""
                     DROP TABLE IF EXISTS feedbacks;
+                    DROP TABLE IF EXISTS judge_results;
                     DROP TABLE IF EXISTS conversations;
                     DROP TABLE IF EXISTS documents;
                 """)
@@ -82,6 +83,29 @@ def init_db(drop=False):
                         ON DELETE CASCADE,
                     helpful BOOLEAN NOT NULL,
                     created_at TIMESTAMP DEFAULT NOW()
+                );
+            """)
+
+            cur.execute("""
+                CREATE TABLE IF NOT EXISTS judge_results (
+                    id SERIAL PRIMARY KEY,
+
+                    conversation_id INTEGER NOT NULL UNIQUE
+                        REFERENCES conversations(id)
+                        ON DELETE CASCADE,
+
+                    relevance TEXT NOT NULL
+                        CHECK (
+                            relevance IN (
+                                'RELEVANT',
+                                'PARTLY_RELEVANT',
+                                'NOT_RELEVANT'
+                            )
+                        ),
+
+                    reason TEXT NOT NULL,
+
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 );
             """)
 

@@ -45,10 +45,12 @@ def get_feedback_summary():
 def get_recent_conversations(limit=20):
     with get_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
+            cur.execute(
+                """
                 SELECT
                     c.id,
                     c.question,
+                    c.answer,
                     c.total_time,
                     c.total_tokens,
                     f.helpful,
@@ -58,8 +60,35 @@ def get_recent_conversations(limit=20):
                     ON c.id = f.conversation_id
                 ORDER BY c.created_at DESC
                 LIMIT %s;
-            """, (limit,))
+                """,
+                (limit,),
+            )
 
             rows = cur.fetchall()
 
     return rows
+
+def get_judge_summary():
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT
+                    COUNT(*) FILTER (
+                        WHERE relevance = 'RELEVANT'
+                    ),
+                    COUNT(*) FILTER (
+                        WHERE relevance = 'PARTLY_RELEVANT'
+                    ),
+                    COUNT(*) FILTER (
+                        WHERE relevance = 'NOT_RELEVANT'
+                    )
+                FROM judge_results;
+            """)
+
+            relevant, partly_relevant, not_relevant = cur.fetchone()
+
+    return {
+        "relevant": relevant,
+        "partly_relevant": partly_relevant,
+        "not_relevant": not_relevant,
+    }
