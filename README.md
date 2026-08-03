@@ -1,287 +1,447 @@
 # 🇩🇪 Germany Decoded
+![Python](https://img.shields.io/badge/Python-3.12-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![LLM](https://img.shields.io/badge/LLM-GPT--5%20Mini-orange)
 
-> An AI-powered legal information assistant that helps English-speaking residents of Germany understand German legal information using trusted official sources.
+<p align="center">
 
----
+**An AI-powered legal information assistant that helps English-speaking residents understand German law using official legal sources.**
 
-## Overview
+Final project for the **DataTalks.Club LLM Zoomcamp 2026**.
 
-Germany Decoded is an AI application that combines document ingestion, retrieval systems, and large language models to make German legal information easier to access.
-
-Many important legal and administrative resources in Germany are written in German and use complex legal terminology. This creates a barrier for people who need to understand their rights but are not familiar with the German legal system.
-
-The goal of Germany Decoded is to provide clear English explanations of German legal information while grounding answers in official sources.
-
-The project is designed as a **Retrieval-Augmented Generation (RAG) application**:
-
-- retrieve relevant legal information from trusted sources,
-- provide the retrieved context to an LLM,
-- generate understandable explanations,
-- include citations and legal disclaimers.
-
-The assistant is designed to provide legal information, not legal advice.
+</p>
 
 ---
 
-# Project Goals
+## ✨ Features
 
-Germany Decoded aims to:
-
-- Make German legal information more accessible.
-- Retrieve information from trusted official sources.
-- Explain legal concepts in clear English.
-- Provide citations for retrieved sources.
-- Communicate uncertainty when information is incomplete.
-- Demonstrate a complete production-style AI application workflow.
+- 🇩🇪 Official German Civil Code (BGB) knowledge base
+- 🔍 Hybrid Retrieval (Semantic Search + PostgreSQL Full Text Search)
+- 🧠 Query Rewriting from English to German legal terminology
+- 🤖 GPT-5 Mini grounded answer generation
+- 📚 Official legal source references
+- 📊 Retrieval benchmark evaluation (Hit@K)
+- ⚖️ LLM-as-a-Judge evaluation
+- 💬 Conversation history
+- 👍 User feedback collection
+- 📈 Monitoring dashboard with charts
+- 🐘 PostgreSQL + pgvector
+- 🐳 Docker-based local development
 
 ---
 
-# How It Works
+# Why Germany Decoded?
 
-The system consists of several components:
+Living in Germany often means navigating legal information that is:
 
+- written in German,
+- spread across multiple official sources,
+- filled with legal terminology unfamiliar to many English speakers.
+
+While modern large language models can produce convincing answers, they may also generate unsupported or inaccurate legal information if they are not grounded in authoritative sources.
+
+Germany Decoded addresses this problem by retrieving relevant sections from the **German Civil Code (BGB)** before generating an English explanation.
+
+Instead of asking users to search through legal texts themselves, the application combines retrieval techniques with an LLM to produce answers that are both understandable and grounded in official legislation.
+
+The goal is **not** to replace legal professionals, but to make German legal information significantly more accessible.
+
+---
+
+# 📸 Application Preview
+
+The application consists of an AI legal assistant for end users and an integrated Admin Dashboard for monitoring and evaluation.
+
+## Assistant
+
+| Home | Generated Answer |
+|------|------------------|
+| ![](screenshots/assistant.png) | ![](screenshots/answer.png) |
+
+The assistant retrieves relevant legal sections from the German Civil Code (BGB), generates grounded English explanations using GPT-5 Mini, and displays the official sources used to produce the answer.
+
+---
+
+## Monitoring & Administration
+
+| Conversation History | Admin Dashboard |
+|----------------------|-----------------|
+| ![](screenshots/history.png) | ![](screenshots/admin.png) |
+
+The integrated Admin Dashboard provides monitoring metrics, recent conversations, user feedback, latency, token usage, estimated API costs, and evaluation results.
+
+---
+
+## Monitoring Charts
+
+<p align="center">
+
+<img src="screenshots/charts.png" width="90%">
+
+</p>
+
+The monitoring dashboard visualizes application activity using interactive charts, making it easier to inspect system performance and user interactions.
+
+---
+
+## 🎥 Demo Video
+
+> **Coming soon** (placeholder before submission)
+
+A short walkthrough demonstrates:
+
+- Asking a legal question
+- Hybrid retrieval
+- Grounded answer generation
+- Conversation history
+- Monitoring dashboard
+- Evaluation features
+
+---
+
+# 🚀 Project Highlights
+
+This project demonstrates a complete end-to-end Retrieval-Augmented Generation (RAG) pipeline, including:
+
+- automated knowledge ingestion,
+- multilingual embeddings,
+- hybrid retrieval,
+- query rewriting,
+- grounded answer generation,
+- retrieval evaluation,
+- LLM-as-a-Judge evaluation,
+- monitoring,
+- conversation logging,
+- user feedback,
+- an integrated Streamlit application.
+
+Unlike the example application developed during the course, Germany Decoded focuses on a real-world legal domain and combines multiple retrieval techniques to improve answer quality.
+
+---
+
+# 🏗️ System Architecture
+
+```mermaid
+flowchart TD
+
+    A[User Question] --> B[Query Rewriting]
+
+    B --> C[Hybrid Retrieval]
+
+    C --> D[Semantic Search<br/>PostgreSQL + pgvector]
+    C --> E[Keyword Search<br/>PostgreSQL Full Text Search]
+
+    D --> F[Retrieved Legal Sections]
+    E --> F
+
+    F --> G[GPT-5 Mini]
+
+    G --> H[English Answer]
+
+    H --> I[Conversation Logging]
+
+    I --> J[User Feedback]
+    I --> K[Monitoring Dashboard]
+    I --> L[LLM-as-a-Judge]
 ```
-                 User Question
-                      |
-                      v
-                AI Assistant
-                      |
-                      v
-             Retrieval Pipeline
-                      |
-        +-------------+-------------+
-        |                           |
-        v                           v
- Semantic Search              Keyword Search
-   (pgvector)                    (PostgreSQL FTS)
-        |                           |
-        +-------------+-------------+
-                      |
-                      v
-              Relevant Documents
-                      |
-                      v
-                  GPT-5 Mini
-                      |
-                      v
-        English Explanation + Citations
-```
+
+The application follows a Retrieval-Augmented Generation (RAG) pipeline.
+
+Instead of answering directly from the LLM's internal knowledge, Germany Decoded first retrieves relevant legal information from an official knowledge base and then uses those documents to generate an English explanation.
+
+This approach reduces hallucinations while ensuring that answers are grounded in official legal sources.
 
 ---
 
-# Architecture Components
+# ⚙️ How It Works
 
 ## 1. Knowledge Ingestion
 
-The system starts by building a legal knowledge base from official sources.
+The project builds a searchable legal knowledge base from the official German Civil Code (BGB).
 
-Current source:
+During indexing, the ingestion pipeline:
 
-- German Civil Code (Bürgerliches Gesetzbuch — BGB)
+- loads the legal documents,
+- normalizes legal sections,
+- generates multilingual embeddings,
+- creates PostgreSQL Full Text Search vectors,
+- stores everything in PostgreSQL.
 
-The ingestion pipeline:
-
-- downloads legal documents,
-- extracts legal sections,
-- normalizes the data,
-- stores documents in PostgreSQL.
-
-Each document contains information such as:
+Each stored document contains:
 
 - law name,
 - section number,
 - title,
 - legal text,
-- source information,
-- language metadata.
+- language,
+- source URL,
+- vector embedding,
+- search vector.
+
+The downloaded legal texts are **not stored in this repository**. Each user creates a local knowledge base by running the indexing pipeline.
 
 ---
 
-## 2. Vector Database and Semantic Search
+## 2. Query Rewriting
 
-Legal questions are often expressed differently from legal documents.
+Users naturally ask questions in English.
 
 For example:
 
-User:
-
 > Can my landlord keep my deposit?
 
-Legal document:
+However, legal documents often use different terminology:
 
-> Begrenzung und Anlage von Mietsicherheiten
+> Mietsicherheit
 
-Because users do not always know legal terminology, Germany Decoded uses semantic search.
+To bridge this gap, GPT-5 Mini extracts the primary German legal concept from the user's question.
 
-The system:
-
-- creates embeddings for documents,
-- stores them using PostgreSQL + pgvector,
-- retrieves documents based on meaning rather than exact words.
-
-This allows the system to connect everyday questions with relevant legal sections.
+The rewritten concept is used only for the keyword-search branch, while the original English question is still used for semantic retrieval.
 
 ---
 
 ## 3. Hybrid Retrieval
 
-Semantic search is powerful, but legal information also benefits from exact terminology matching.
-
-Germany Decoded combines:
+Germany Decoded combines two complementary retrieval methods.
 
 ### Semantic Search
 
-Uses embeddings to find documents with similar meaning.
+Semantic search retrieves documents based on meaning rather than exact wording.
+
+Document embeddings are stored in PostgreSQL using **pgvector**, and an HNSW index is used for efficient nearest-neighbor search.
 
 ### PostgreSQL Full Text Search
 
-Uses German legal terminology matching.
+Keyword search retrieves documents using official German legal terminology through PostgreSQL's Full Text Search capabilities.
 
-The hybrid approach improves retrieval by combining:
+### Hybrid Ranking
 
-- understanding of user intent,
-- matching of official legal language.
+Both retrieval methods produce candidate documents.
 
----
+Their scores are normalized and combined into a hybrid score, allowing the system to benefit from both semantic understanding and exact legal terminology.
 
-## 4. Assistant Application
-
-The assistant uses GPT-5 Mini to generate answers.
-
-The assistant:
-
-1. Receives the user's question.
-2. Retrieves relevant legal documents.
-3. Uses retrieved documents as context.
-4. Generates an English explanation.
-5. Provides citations.
-6. Includes a legal disclaimer.
-
-Example:
-
-**Question**
-
-> My apartment has mold. Can I reduce my rent?
-
-**Assistant**
-
-The system retrieves the relevant BGB sections and explains the applicable rules in English.
+The highest-ranked legal sections are then provided to the LLM.
 
 ---
 
-# Evaluation
+## 4. Answer Generation
 
-A retrieval system needs to be measured, not only tested manually.
+GPT-5 Mini receives:
 
-Germany Decoded includes a retrieval evaluation pipeline.
+- the user's original question,
+- the retrieved legal sections,
+- system instructions defining the assistant's behavior.
 
-Current evaluation features:
+The model is instructed to:
 
-- benchmark questions,
-- expected legal sections,
-- retrieval debugging,
+- answer in English,
+- rely only on the retrieved legal context,
+- avoid unsupported legal claims,
+- cite the relevant legal sections,
+- communicate uncertainty when the retrieved information is insufficient,
+- include a legal-information disclaimer.
+
+The final answer is then returned to the user together with the official legal sources.
+
+---
+
+## 5. Monitoring
+
+Every interaction is stored in PostgreSQL.
+
+The application records:
+
+- user question,
+- generated answer,
+- retrieved sources,
+- latency,
+- token usage,
+- estimated API cost,
+- user feedback,
+- timestamps.
+
+These records power the integrated monitoring dashboard and evaluation pipeline.
+
+---
+
+# 📊 Evaluation
+
+Evaluation was an important part of this project. Rather than relying only on manual testing, Germany Decoded includes separate evaluation pipelines for both **retrieval quality** and **generated answers**.
+
+---
+
+## Retrieval Evaluation
+
+The retrieval pipeline is evaluated using a manually created benchmark consisting of representative English legal questions and their expected BGB sections.
+
+Each question specifies one or more legal sections that should be retrieved.
+
+The evaluator measures:
+
+- **Hit@1** – the expected section appears as the top result.
+- **Hit@3** – the expected section appears within the first three retrieved documents.
+- **Hit@5** – the expected section appears within the first five retrieved documents.
+
+### Retrieval Approaches
+
+Two retrieval strategies were evaluated:
+
+| Approach | Description |
+|----------|-------------|
+| Semantic Search | Vector similarity using multilingual embeddings stored with pgvector |
+| Hybrid Retrieval | Semantic Search combined with PostgreSQL Full Text Search |
+
+### Results
+
+| Metric | Semantic | Hybrid |
+|:------:|---------:|-------:|
+| Hit@1 | **40%** | 30% |
+| Hit@3 | 40% | **70%** |
+| Hit@5 | 50% | **70%** |
+
+Although semantic retrieval produced a slightly higher Hit@1 score, hybrid retrieval substantially improved retrieval coverage for the top three and top five results.
+
+Since multiple retrieved documents are passed to the LLM, improving Hit@3 and Hit@5 resulted in better overall answer quality. Therefore, **Hybrid Retrieval** was selected as the default retrieval strategy.
+
+---
+
+## Retrieval Debugger
+
+To simplify retrieval development, the project also includes a retrieval debugger.
+
+For every benchmark question it displays:
+
+- expected legal section(s),
+- retrieved documents,
+- document titles,
+- retrieval scores,
 - Hit@K metrics.
 
-Example:
-
-Question:
-
-```
-Can I reduce my rent because of mold?
-```
-
-Expected:
-
-```
-BGB §536
-```
-
-The system evaluates whether the correct document appears in the retrieved results.
-
-Current experiments include:
-
-- semantic retrieval,
-- hybrid retrieval,
-- retrieval weighting.
-
-Current benchmark result:
-
-- Total Questions = 10
-- Hit@1 = 30%
-- Hit@3 = 70%
-- Hit@5 = 70%
-
-The evaluation checks whether the expected legal section appears in the retrieved documents.
+This made it easier to compare retrieval strategies and identify failure cases during development.
 
 ---
 
-# Monitoring and Admin Features
+## LLM-as-a-Judge
 
-The application also includes monitoring functionality.
+Retrieval quality alone does not guarantee good answers.
 
-Tracked information:
+Germany Decoded therefore includes an **offline LLM-as-a-Judge evaluation pipeline**.
 
-- conversations,
-- response latency,
-- token usage,
-- API costs,
-- user feedback.
+Previously generated conversations are evaluated by GPT-5 Mini, which classifies each answer into one of three categories:
 
-The project includes a separate Streamlit admin dashboard for inspecting application usage, performance metrics, and user feedback.
+- ✅ **RELEVANT**
+- 🟡 **PARTLY_RELEVANT**
+- ❌ **NOT_RELEVANT**
+
+For every judgment, the model also generates a short explanation describing why the answer received that classification.
+
+Judge results are stored in PostgreSQL and visualized in the Admin Dashboard.
+
+Because judging is performed **offline**, it does not increase latency or API cost for normal users.
 
 ---
 
-# Running Locally
+# 📈 Monitoring
 
-Germany Decoded can be run locally with your own API key and database.
+Every user interaction is stored in PostgreSQL.
 
-The project uses:
+The monitoring system records:
 
-- Python
-- uv for dependency management
-- Docker for PostgreSQL + pgvector
-- OpenAI API for answer generation
+- question,
+- generated answer,
+- retrieved sources,
+- search latency,
+- LLM latency,
+- total latency,
+- input tokens,
+- output tokens,
+- estimated API cost,
+- user feedback,
+- timestamps.
+
+The integrated Admin Dashboard visualizes these metrics using interactive charts.
+
+The dashboard also displays:
+
+- overall application statistics,
+- recent conversations,
+- user feedback distribution,
+- LLM judge results.
+
+---
+
+# ✅ Zoomcamp Requirements
+
+The following table summarizes how Germany Decoded satisfies the LLM Zoomcamp project requirements.
+
+| Requirement | Implementation |
+|-------------|----------------|
+| Problem Description | English legal assistant for Germany |
+| Knowledge Base | Official German Civil Code (BGB) |
+| Retrieval Flow | Hybrid Retrieval (Semantic + PostgreSQL Full Text Search) |
+| LLM | GPT-5 Mini |
+| Retrieval Evaluation | Benchmark dataset with Hit@1 / Hit@3 / Hit@5 |
+| LLM Evaluation | Offline LLM-as-a-Judge |
+| Interface | Streamlit application |
+| Monitoring | Dashboard, charts, conversation logging, user feedback |
+| Containerization | Docker Compose for PostgreSQL + pgvector |
+| Reproducibility | README, Makefile, uv, Docker Compose |
+
+### Implemented Best Practices
+
+- ✅ Hybrid Search
+- ✅ Query Rewriting
+- ⏳ Document Reranking (planned)
+
+---
+
+# 🚀 Running the Project
+
+Germany Decoded can be run locally using your own OpenAI API key.
 
 ---
 
 ## Requirements
 
-Install:
+Install the following software:
 
 - Python 3.12+
-- uv
 - Docker
-
-You also need an OpenAI API key.
+- uv
+- Make
 
 ---
 
-## 1. Clone the repository
+## 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/besteekmen/germany-decoded.git
 
 cd germany-decoded
 ```
 
 ---
 
-## 2. Install dependencies
-
-Install the project environment:
+## 2. Install Dependencies
 
 ```bash
 uv sync
 ```
 
+Dependency versions are locked in:
+
+```text
+uv.lock
+```
+
 ---
 
-## 3. Configure environment variables
+## 3. Configure Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the project root.
 
 ```env
-OPENAI_API_KEY=your_openai_api_key
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
 
 POSTGRES_DB=germany_decoded
 POSTGRES_HOST=localhost
@@ -294,78 +454,84 @@ POSTGRES_PASSWORD=password
 
 ## 4. Start PostgreSQL
 
-Start the database:
-
 ```bash
 make up
 ```
 
-This starts PostgreSQL with pgvector enabled.
+This starts PostgreSQL together with the pgvector extension using Docker Compose.
+
 ---
 
-## 5. Initialize the database
-
-Create the required tables:
+## 5. Initialize the Database
 
 ```bash
 make init-db
 ```
 
+This creates the required database tables and indexes.
+
 ---
 
-## 6. Build the knowledge base
-
-Download and process the legal source documents:
+## 6. Build the Knowledge Base
 
 ```bash
 make index
 ```
-This creates embeddings and stores the legal documents in PostgreSQL.
+
+The indexing pipeline:
+
+1. loads the official BGB documents,
+2. normalizes the legal sections,
+3. generates embeddings,
+4. creates PostgreSQL Full Text Search vectors,
+5. stores everything in PostgreSQL.
+
 ---
 
-## 7. Run the assistant
-
-Start the main Streamlit application:
+## 7. Launch the Application
 
 ```bash
 make app
 ```
 
-The application allows users to:
-- ask questions in English,
-- retrieve relevant German legal sections,
-- receive English explanations,
-- view source citations,
-- provide feedback.
+The Streamlit application contains both:
 
----
+- Assistant
+- Admin Dashboard
 
-## 8. Run the monitoring dashboard
+The Admin Dashboard is controlled by the following constant inside `app.py`:
 
-The project also includes an admin dashboard:
-
-```bash
-make monitor
+```python
+ADMIN = True
 ```
 
-The dashboard displays:
-- total questions,
-- latency metrics,
-- token usage,
-- API costs,
-- user feedback.
+Set it to:
+
+```python
+ADMIN = False
+```
+
+to expose only the user-facing assistant.
 
 ---
 
-## 8. Run evaluation
+## 8. Run Evaluation
 
-The retrieval pipeline can be evaluated with:
+Run the complete evaluation pipeline:
+
+```bash
+make eval-all
+```
+
+Or execute each evaluation separately:
 
 ```bash
 make eval-retrieval
+
+make eval-judge
 ```
 
-Debug retrieval results with:
+Inspect retrieval behaviour:
 
 ```bash
 make debug-retrieval
@@ -373,160 +539,193 @@ make debug-retrieval
 
 ---
 
-## Database Management
+## 9. Additional Commands
 
-Reset the database:
+| Command | Description |
+|----------|-------------|
+| `make up` | Start PostgreSQL |
+| `make down` | Stop PostgreSQL |
+| `make init-db` | Initialize the database |
+| `make reset-db` | Recreate all database tables |
+| `make index` | Build the legal knowledge base |
+| `make cli` | Run the console assistant |
+| `make app` | Launch the Streamlit application |
+| `make eval-all` | Run both evaluation pipelines |
+| `make eval-retrieval` | Run retrieval evaluation |
+| `make eval-judge` | Run LLM-as-a-Judge |
+| `make debug-retrieval` | Debug retrieval results |
 
-```bash
-make reset-db
-```
+---
 
-Stop services:
+# 🛠️ Technology Stack
 
-```bash
-make down
+| Category | Technology |
+|-----------|------------|
+| Language | Python |
+| User Interface | Streamlit |
+| LLM | GPT-5 Mini |
+| Embeddings | Sentence Transformers |
+| Database | PostgreSQL |
+| Vector Search | pgvector |
+| Keyword Search | PostgreSQL Full Text Search |
+| Retrieval | Hybrid Retrieval |
+| Monitoring | Streamlit Dashboard |
+| Containerization | Docker Compose |
+| Environment | uv |
+
+---
+
+# 📁 Repository Structure
+
+```text
+germany-decoded/
+│
+├── app.py                    # Streamlit application
+├── Makefile
+├── docker-compose.yaml
+├── README.md
+├── DEVLOG.md
+├── TODO.md
+├── SOURCES.md
+│
+└── src/
+    └── germany_decoded/
+        ├── assistant.py
+        ├── retrieval.py
+        ├── rewrite.py
+        ├── ingestion.py
+        ├── embeddings.py
+        ├── metrics.py
+        │
+        ├── loaders/
+        │   └── bgb.py
+        │
+        ├── db/
+        │   ├── conversation.py
+        │   ├── feedback.py
+        │   ├── judge.py
+        │   ├── monitoring.py
+        │   └── ...
+        │
+        └── evaluation/
+            ├── retrieval_eval.py
+            ├── judge_eval.py
+            ├── debug_retrieval.py
+            └── retrieval_benchmark.json
+
 ```
 
 ---
 
-# Tech Stack
+# 📚 Additional Documentation
 
-## Backend
+The repository also contains:
 
-- Python
-- PostgreSQL
-- pgvector
-- Docker
-- uv
+| File | Purpose |
+|------|---------|
+| `DEVLOG.md` | Engineering decisions and development log |
+| `TODO.md` | Project roadmap |
+| `SOURCES.md` | Official data sources |
 
-## AI
+---
 
-- OpenAI API
-- GPT-5 Mini
-- Sentence Transformers
-- Embeddings
+# 🚧 Current Limitations
+
+Like any retrieval-based application, Germany Decoded has several current limitations.
+
+- The knowledge base currently focuses on the German Civil Code (BGB).
+- The retrieval benchmark currently contains a limited set of representative legal questions.
+- The LLM Judge evaluates answer relevance rather than legal correctness.
+- Conversation history is read-only and is not used as long-term conversation memory.
+- The Python application currently runs locally and is not fully containerized.
+- Some legal questions may require additional official sources that are not yet included in the knowledge base.
+
+These limitations also represent opportunities for future development.
+
+---
+
+# 🔮 Future Work
+
+Planned improvements include:
+
+## Knowledge Base
+
+- Add additional official German legal and governmental sources.
+- Expand beyond the BGB into other legal domains.
+- Support multi-source retrieval.
 
 ## Retrieval
 
-- Multilingual embeddings
+- Experiment with improved chunking strategies.
+- Implement document reranking.
+- Explore alternative embedding models.
+
+## Assistant
+
+- Official web-search fallback.
+- Upload and explain official German documents.
+- Deadline extraction from official letters.
+- Draft response letters.
+- Multi-turn conversation memory.
+
+## Infrastructure
+
+- Fully containerize the application.
+- Deploy the application publicly.
+- Add OpenTelemetry tracing.
+- Add production observability dashboards.
+
+---
+
+# 🤝 Acknowledgements
+
+This project was developed as the final project for the **DataTalks.Club LLM Zoomcamp 2026**.
+
+The project builds upon concepts introduced throughout the course, including:
+
+- Retrieval-Augmented Generation (RAG)
+- Hybrid Retrieval
+- Query Rewriting
+- Retrieval Evaluation
+- LLM-as-a-Judge
+- Monitoring and Feedback
 - PostgreSQL + pgvector
-- Vector similarity search
-- PostgreSQL Full Text Search
-- Hybrid retrieval
+- Streamlit Applications
 
-## Application
-
-- Streamlit assistant interface
-- Streamlit admin dashboard
-- Monitoring system
-- Makefile-based workflow
+The application itself, dataset, architecture, implementation, and engineering decisions were designed specifically for this project.
 
 ---
 
-# Development Progress
+# 📜 Data Sources
 
-## Completed
+Germany Decoded currently uses publicly available legal information from trusted official sources.
 
-### Project Setup
+The current knowledge base is built from the **German Civil Code (BGB)** available through **Gesetze im Internet**, published by the German Federal Ministry of Justice.
 
-- Python project setup
-- Dependency management with uv
-- Docker configuration
-- PostgreSQL setup
-- pgvector configuration
+Downloaded legal texts are processed locally during indexing and are **not redistributed through this repository**.
 
-### Knowledge Ingestion
+Additional details can be found in:
 
-- BGB source selection
-- Legal document loader
-- Document normalization
-- Database storage pipeline
-
-### Retrieval
-
-- Multilingual embeddings
-- Vector storage with PostgreSQL + pgvector
-- Semantic search
-- PostgreSQL Full Text Search
-- Hybrid retrieval
-- Retrieval evaluation pipeline
-
-### Assistant
-
-- GPT-5 Mini integration
-- Prompt design
-- English explanations
-- Source citations
-- Legal disclaimer
-
-### Monitoring
-
-- Conversation logging
-- Token tracking
-- Cost tracking
-- Feedback collection
-- Admin dashboard
+- `SOURCES.md`
 
 ---
 
-# Future Improvements
+# ⚠️ Disclaimer
 
-Planned improvements:
+Germany Decoded provides **legal information**, not legal advice.
 
-- Better document chunking strategies
-- Retrieval reranking
-- Confidence estimation
-- LLM-as-a-Judge evaluation
-- Better citation formatting
-- Conversation history
-- Official web search fallback
-- Multi-source legal retrieval
-- Deployment
+Although every answer is grounded in retrieved official legal sources, the application may not retrieve every relevant provision and should not be relied upon as the sole basis for legal decisions.
+
+Users should always:
+
+- consult the cited official sources,
+- verify important legal information,
+- seek advice from a qualified legal professional when appropriate.
 
 ---
 
-# Why This Project?
+# 📄 License
 
-Germany Decoded was built as a practical AI engineering project to demonstrate the complete lifecycle of an LLM application.
+This project is released under the **MIT License**.
 
-The project covers:
-
-- building a knowledge pipeline,
-- storing and retrieving documents,
-- implementing RAG,
-- evaluating retrieval quality,
-- monitoring AI systems,
-- connecting an LLM to real-world data,
-- building a usable AI product.
-
----
-
-# Data Sources
-
-Germany Decoded uses publicly available official sources.
-
-Legal documents are generated locally and are not stored inside this repository.
-
-See:
-
-```
-SOURCES.md
-```
-
-for more information.
-
----
-
-# Disclaimer
-
-Germany Decoded provides legal information based on retrieved official sources.
-
-It is not a substitute for professional legal advice.
-
-Users should consult qualified legal professionals when making important legal decisions.
-
----
-
-# License
-
-MIT License
+See the `LICENSE` file for details.
