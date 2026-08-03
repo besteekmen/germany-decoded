@@ -30,6 +30,7 @@ def init_db(drop=False):
                     content TEXT NOT NULL,
                     source TEXT,
                     language TEXT,
+                    search_vector tsvector,
                     embedding VECTOR(384)
                 );
             """)
@@ -38,6 +39,12 @@ def init_db(drop=False):
                 CREATE INDEX IF NOT EXISTS documents_embedding_idx
                 ON documents
                 USING hnsw (embedding vector_cosine_ops);
+            """)
+
+            cur.execute("""
+                CREATE INDEX IF NOT EXISTS documents_search_idx
+                ON documents
+                USING GIN(search_vector);
             """)
 
             cur.execute("""

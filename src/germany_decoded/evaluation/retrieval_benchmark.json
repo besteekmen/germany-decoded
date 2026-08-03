@@ -1,0 +1,92 @@
+[
+  {
+    "question": "Can I reduce my rent because of mold?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "536"
+      }
+    ]
+  },
+  {
+    "question": "Can my landlord keep my deposit?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "551"
+      }
+    ]
+  },
+  {
+    "question": "Who pays for normal wear and tear?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "538"
+      }
+    ]
+  },
+  {
+    "question": "What happens if I keep using the apartment against the contract after a warning?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "541"
+      }
+    ]
+  },
+  {
+    "question": "Can my landlord terminate the lease without notice?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "543"
+      }
+    ]
+  },
+  {
+    "question": "When can the landlord increase my rent?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "558"
+      }
+    ]
+  },
+  {
+    "question": "How much rent deposit can my landlord ask for?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "551"
+      }
+    ]
+  },
+  {
+    "question": "Who must repair defects in the apartment?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "535"
+      }
+    ]
+  },
+  {
+    "question": "Can the landlord enter my apartment whenever they want?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "535"
+      }
+    ]
+  },
+  {
+    "question": "What if the apartment becomes unusable because of defects?",
+    "expected": [
+      {
+        "law": "BGB",
+        "section": "536"
+      }
+    ]
+  }
+]

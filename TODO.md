@@ -58,25 +58,35 @@
 - [x] Store conversations in PostgreSQL
 - [x] Store user feedback
 - [x] Build monitoring dashboard
-- [ ] Build admin dashboard
+- [x] Build admin dashboard
 
 ---
 
 ## ⏳ Milestone 6 — Evaluation
 
-- [ ] Retrieval evaluation
-- [ ] LLM-as-a-Judge
-- [ ] Improve chunking
+- [x] Build benchmark dataset
+- [x] Retrieval evaluation
+- [x] Build retrieval debugger
+- [x] Hybrid search (semantic + keyword)
+- [x] PostgreSQL Full Text Search
+- [ ] Experiment with chunking
 - [ ] Improve prompts
-- [ ] Build retrieval debugger
+- [ ] Reranking
+- [ ] LLM-as-a-Judge
 
 ---
 
-## ⏳ Milestone 7 — Search Improvements
+## ⏳ Milestone 7 — Product Polish
 
-- [ ] Hybrid search (semantic + keyword)
-- [ ] PostgreSQL Full Text Search
-- [ ] Reranking
+- [ ] Merge Assistant + Admin
+- [ ] Admin-only navigation
+- [ ] Better dashboard visuals
+- [ ] Charts
+- [ ] Better branding
+- [ ] Loading animations
+- [ ] Conversation history
+- [ ] Better citations
+- [ ] Deployment
 
 ---
 

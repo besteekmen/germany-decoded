@@ -21,3 +21,9 @@ app:
 
 monitor:
 	uv run streamlit run admin.py
+
+eval-retrieval:
+	uv run python -m germany_decoded.evaluation.retrieval_eval
+
+debug-retrieval:
+	uv run python -m germany_decoded.evaluation.debug_retrieval

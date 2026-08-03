@@ -10,8 +10,17 @@ def store_documents(documents, embeddings):
                 cur.execute(
                     """
                     INSERT INTO documents
-                    (law, section, title, content, source, language, embedding)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    (
+                        law, 
+                        section, 
+                        title, 
+                        content, 
+                        source, 
+                        language,
+                        search_vector, 
+                        embedding
+                    )
+                    VALUES (%s, %s, %s, %s, %s, %s, to_tsvector('german', %s || ' ' || %s), %s)
                     """,
                     (
                         doc["law"],
@@ -20,6 +29,8 @@ def store_documents(documents, embeddings):
                         doc["content"],
                         doc["source"],
                         doc["language"],
+                        doc["title"] or "",
+                        doc["content"],
                         embedding.tolist()  # Convert numpy array to list for insertion
                     ),
                 )
