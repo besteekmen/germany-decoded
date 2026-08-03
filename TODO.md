@@ -49,12 +49,12 @@
 
 ---
 
-## 🔄 Milestone 5 — Monitoring
+## ✅ Milestone 5 — Monitoring
 
 - [x] Log every conversation
 - [x] Measure latency
 - [x] Measure token usage
-- [x] Measure costs
+- [x] Measure actual API costs
 - [x] Store conversations in PostgreSQL
 - [x] Store user feedback
 - [x] Build monitoring dashboard
@@ -69,10 +69,10 @@
 - [x] Build retrieval debugger
 - [x] Hybrid search (semantic + keyword)
 - [x] PostgreSQL Full Text Search
+- [x] LLM-as-a-Judge
 - [ ] Experiment with chunking
 - [ ] Improve prompts
 - [ ] Reranking
-- [ ] LLM-as-a-Judge
 
 ---
 
@@ -81,10 +81,10 @@
 - [x] Merge Assistant + Admin
 - [x] Admin-only navigation
 - [x] Better dashboard visuals
-- [ ] Charts
-- [ ] Better branding
+- [x] Charts
+- [x] Better branding
 - [x] Loading animations
-- [ ] Conversation history
+- [x] Conversation history
 - [ ] Better citations
 - [ ] Deployment
 

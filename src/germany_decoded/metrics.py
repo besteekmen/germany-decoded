@@ -23,7 +23,21 @@ class ConversationRecord:
     timestamp: datetime = field(default_factory=datetime.now)
 
 def calculate_cost(model, usage):
-    #cost = 0
-    #if "gpt-5-mini" in model:
-        #cost = (usage.input_tokens * 0.15 + usage.output_tokens * 0.60) / 1_000_000
+
+    if "gpt-5-mini" in model:
+
+        input_cost = (
+            usage.input_tokens
+            * 0.25
+            / 1_000_000
+        )
+
+        output_cost = (
+            usage.output_tokens
+            * 2.00
+            / 1_000_000
+        )
+
+        return input_cost + output_cost
+
     return 0.0
