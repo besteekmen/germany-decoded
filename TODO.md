@@ -33,7 +33,7 @@
 - [x] Store vectors in PostgreSQL + pgvector
 - [x] Build semantic search
 - [x] Create HNSW vector index
-- [ ] Evaluate retrieval quality
+- [x] Evaluate retrieval quality
 
 ---
 
@@ -49,7 +49,7 @@
 
 ---
 
-## 🔄 Milestone 5 — Monitoring (Current)
+## 🔄 Milestone 5 — Monitoring
 
 - [x] Log every conversation
 - [x] Measure latency

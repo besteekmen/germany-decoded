@@ -144,7 +144,7 @@ The hybrid approach improves retrieval by combining:
 
 ---
 
-## 4. AI Assistant
+## 4. Assistant Application
 
 The assistant uses GPT-5 Mini to generate answers.
 
@@ -204,6 +204,15 @@ Current experiments include:
 - hybrid retrieval,
 - retrieval weighting.
 
+Current benchmark result:
+
+- Total Questions = 10
+- Hit@1 = 30%
+- Hit@3 = 70%
+- Hit@5 = 70%
+
+The evaluation checks whether the expected legal section appears in the retrieved documents.
+
 ---
 
 # Monitoring and Admin Features
@@ -218,21 +227,32 @@ Tracked information:
 - API costs,
 - user feedback.
 
-The project includes an admin dashboard for inspecting application usage and performance.
+The project includes a separate Streamlit admin dashboard for inspecting application usage, performance metrics, and user feedback.
 
 ---
 
 # Running Locally
 
-You can run Germany Decoded locally using your own API keys.
+Germany Decoded can be run locally with your own API key and database.
+
+The project uses:
+
+- Python
+- uv for dependency management
+- Docker for PostgreSQL + pgvector
+- OpenAI API for answer generation
+
+---
 
 ## Requirements
 
+Install:
+
 - Python 3.12+
+- uv
 - Docker
-- PostgreSQL
-- pgvector
-- OpenAI API key
+
+You also need an OpenAI API key.
 
 ---
 
@@ -248,7 +268,7 @@ cd germany-decoded
 
 ## 2. Install dependencies
 
-This project uses `uv`.
+Install the project environment:
 
 ```bash
 uv sync
@@ -274,12 +294,13 @@ POSTGRES_PASSWORD=password
 
 ## 4. Start PostgreSQL
 
-Start the database using Docker:
+Start the database:
 
 ```bash
-docker compose up -d
+make up
 ```
 
+This starts PostgreSQL with pgvector enabled.
 ---
 
 ## 5. Initialize the database
@@ -292,22 +313,78 @@ make init-db
 
 ---
 
-## 6. Run ingestion
+## 6. Build the knowledge base
 
-Build your local knowledge base:
+Download and process the legal source documents:
 
 ```bash
-make ingest
+make index
+```
+This creates embeddings and stores the legal documents in PostgreSQL.
+---
+
+## 7. Run the assistant
+
+Start the main Streamlit application:
+
+```bash
+make app
+```
+
+The application allows users to:
+- ask questions in English,
+- retrieve relevant German legal sections,
+- receive English explanations,
+- view source citations,
+- provide feedback.
+
+---
+
+## 8. Run the monitoring dashboard
+
+The project also includes an admin dashboard:
+
+```bash
+make monitor
+```
+
+The dashboard displays:
+- total questions,
+- latency metrics,
+- token usage,
+- API costs,
+- user feedback.
+
+---
+
+## 8. Run evaluation
+
+The retrieval pipeline can be evaluated with:
+
+```bash
+make eval-retrieval
+```
+
+Debug retrieval results with:
+
+```bash
+make debug-retrieval
 ```
 
 ---
 
-## 7. Start the application
+## Database Management
 
-Run the assistant:
+Reset the database:
 
 ```bash
-python app.py
+make reset-db
+```
+
+Stop services:
+
+```bash
+make down
 ```
 
 ---
@@ -331,15 +408,18 @@ python app.py
 
 ## Retrieval
 
+- Multilingual embeddings
+- PostgreSQL + pgvector
 - Vector similarity search
 - PostgreSQL Full Text Search
 - Hybrid retrieval
 
 ## Application
 
-- Assistant interface
-- Admin dashboard
+- Streamlit assistant interface
+- Streamlit admin dashboard
 - Monitoring system
+- Makefile-based workflow
 
 ---
 
@@ -365,10 +445,11 @@ python app.py
 ### Retrieval
 
 - Multilingual embeddings
-- Vector storage
+- Vector storage with PostgreSQL + pgvector
 - Semantic search
+- PostgreSQL Full Text Search
 - Hybrid retrieval
-- Retrieval evaluation
+- Retrieval evaluation pipeline
 
 ### Assistant
 
