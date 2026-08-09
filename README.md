@@ -633,7 +633,7 @@ All evaluation commands run inside the application Docker container.
 germany-decoded/
 │
 ├── app.py                    # Streamlit application
-├── Dockerfile.py             # Application container
+├── Dockerfile                # Application container
 ├── docker-compose.yaml       # Application + PostgreSQL/pgvector
 ├── .dockerignore
 ├── Makefile
