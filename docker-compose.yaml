@@ -1,8 +1,6 @@
 services:
   postgres:
     image: pgvector/pgvector:pg17
-    restart: unless-stopped
-    container_name: germany-decoded-db
 
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
@@ -15,5 +13,27 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    env_file:
+      - .env
+
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+
+    ports:
+      - "8501:8501"
+
+    depends_on:
+      - postgres
+    
+    volumes:
+      - model_cache:/root/.cache/huggingface
+
 volumes:
   postgres_data:
+  model_cache:

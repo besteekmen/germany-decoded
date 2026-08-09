@@ -26,7 +26,7 @@ Final project for the **DataTalks.Club LLM Zoomcamp 2026**.
 - 👍 User feedback collection
 - 📈 Monitoring dashboard with charts
 - 🐘 PostgreSQL + pgvector
-- 🐳 Docker-based local development
+- 🐳 Fully containerized application with Docker Compose
 
 ---
 
@@ -380,12 +380,13 @@ The following table summarizes how Germany Decoded satisfies the LLM Zoomcamp pr
 | Knowledge Base | Official German Civil Code (BGB) |
 | Retrieval Flow | Hybrid Retrieval (Semantic + PostgreSQL Full Text Search) |
 | LLM | GPT-5 Mini |
-| Retrieval Evaluation | Benchmark dataset with Hit@1 / Hit@3 / Hit@5 |
+| Retrieval Evaluation | Semantic vs Hybrid retrieval benchmark with Hit@1 / Hit@3 / Hit@5 |
 | LLM Evaluation | Offline LLM-as-a-Judge |
 | Interface | Streamlit application |
-| Monitoring | Dashboard, charts, conversation logging, user feedback |
-| Containerization | Docker Compose for PostgreSQL + pgvector |
-| Reproducibility | README, Makefile, uv, Docker Compose |
+| Ingestion Pipeline | Automated Python ingestion and indexing pipeline |
+| Monitoring | Dashboard, 5 charts, conversation logging, user feedback |
+| Containerization | Full Docker Compose stack for Streamlit + PostgreSQL/pgvector |
+| Reproducibility | README, Makefile, uv, Dockerfile, Docker Compose |
 
 ### Implemented Best Practices
 
@@ -397,18 +398,24 @@ The following table summarizes how Germany Decoded satisfies the LLM Zoomcamp pr
 
 # 🚀 Running the Project
 
-Germany Decoded can be run locally using your own OpenAI API key.
+Germany Decoded runs as a fully containerized application using Docker Compose.
+
+The Streamlit application, PostgreSQL/pgvector database, indexing pipeline, database initialization, CLI, and evaluation commands can all be executed through Docker.
 
 ---
 
 ## Requirements
 
-Install the following software:
+Install:
 
-- Python 3.12+
 - Docker
-- uv
+- Docker Compose
 - Make
+- Git
+
+You also need an OpenAI API key.
+
+Python and uv do not need to be installed locally when using the Docker setup.
 
 ---
 
@@ -422,21 +429,7 @@ cd germany-decoded
 
 ---
 
-## 2. Install Dependencies
-
-```bash
-uv sync
-```
-
-Dependency versions are locked in:
-
-```text
-uv.lock
-```
-
----
-
-## 3. Configure Environment Variables
+## 2. Configure Environment Variables
 
 Create a `.env` file in the project root.
 
@@ -450,32 +443,105 @@ POSTGRES_USER=admin
 POSTGRES_PASSWORD=password
 ```
 
+Inside Docker Compose, the application automatically connects to the PostgreSQL service using the internal hostname `postgres`.
+
 ---
 
-## 4. Start PostgreSQL
+## 3. Set Up the Application
+
+For a fresh installation, run:
+
+```bash
+make setup
+```
+
+This command:
+
+1. builds the application Docker image,
+2. starts PostgreSQL with pgvector,
+3. initializes the database,
+4. builds the BGB knowledge base,
+5. starts the Streamlit application.
+
+The first setup may take several minutes because the embedding model needs to be downloaded.
+
+---
+
+## 4. Open the Application
+
+After setup, open:
+
+http://localhost:8501
+
+The Streamlit application contains:
+
+- Assistant
+- Admin Dashboard
+
+The Admin Dashboard is controlled by the following constant inside `app.py`:
+
+`ADMIN = True`
+
+Set it to:
+
+`ADMIN = False`
+
+to expose only the user-facing assistant.
+
+---
+
+## 5. Start and Stop the Application
+
+Start the complete Docker Compose stack:
 
 ```bash
 make up
 ```
 
-This starts PostgreSQL together with the pgvector extension using Docker Compose.
+Stop it:
+
+```bash
+make down
+```
+
+Check running containers:
+
+```bash
+make ps
+```
+
+View Streamlit logs:
+
+```bash
+make logs
+```
 
 ---
 
-## 5. Initialize the Database
+## 6. Database and Knowledge Base
+
+Initialize the database:
 
 ```bash
 make init-db
 ```
 
-This creates the required database tables and indexes.
+Recreate all database tables:
 
----
+```bash
+make reset-db
+```
 
-## 6. Build the Knowledge Base
+Build or rebuild the legal knowledge base:
 
 ```bash
 make index
+```
+
+Open PostgreSQL:
+
+```bash
+make psql
 ```
 
 The indexing pipeline:
@@ -486,36 +552,11 @@ The indexing pipeline:
 4. creates PostgreSQL Full Text Search vectors,
 5. stores everything in PostgreSQL.
 
----
-
-## 7. Launch the Application
-
-```bash
-make app
-```
-
-The Streamlit application contains both:
-
-- Assistant
-- Admin Dashboard
-
-The Admin Dashboard is controlled by the following constant inside `app.py`:
-
-```python
-ADMIN = True
-```
-
-Set it to:
-
-```python
-ADMIN = False
-```
-
-to expose only the user-facing assistant.
+Downloaded legal texts are processed during indexing and are not stored in this repository.
 
 ---
 
-## 8. Run Evaluation
+## 7. Run Evaluation
 
 Run the complete evaluation pipeline:
 
@@ -523,11 +564,15 @@ Run the complete evaluation pipeline:
 make eval-all
 ```
 
-Or execute each evaluation separately:
+Run retrieval evaluation:
 
 ```bash
 make eval-retrieval
+```
 
+Run the offline LLM-as-a-Judge evaluation:
+
+```bash
 make eval-judge
 ```
 
@@ -537,18 +582,25 @@ Inspect retrieval behaviour:
 make debug-retrieval
 ```
 
+All evaluation commands run inside the application Docker container.
+
 ---
 
 ## 9. Additional Commands
 
 | Command | Description |
 |----------|-------------|
-| `make up` | Start PostgreSQL |
-| `make down` | Stop PostgreSQL |
-| `make init-db` | Initialize the database |
+| `make setup` | Build and set up the complete application from scratch |
+| `make build` | Build the application Docker image |
+| `make up` | Start the full Docker Compose stack |
+| `make down` | Stop the Docker Compose stack |
+| `make ps` | Show running containers |
+| `make logs` | Follow Streamlit container logs |
+| `make psql` | Open PostgreSQL |
+| `make init-db` | Initialize database tables and indexes |
 | `make reset-db` | Recreate all database tables |
-| `make index` | Build the legal knowledge base |
-| `make cli` | Run the console assistant |
+| `make index` | Build/rebuild the legal knowledge base |
+| `make cli` | Run the console assistant inside Docker |
 | `make app` | Launch the Streamlit application |
 | `make eval-all` | Run both evaluation pipelines |
 | `make eval-retrieval` | Run retrieval evaluation |
@@ -581,8 +633,10 @@ make debug-retrieval
 germany-decoded/
 │
 ├── app.py                    # Streamlit application
+├── Dockerfile.py             # Application container
+├── docker-compose.yaml       # Application + PostgreSQL/pgvector
+├── .dockerignore
 ├── Makefile
-├── docker-compose.yaml
 ├── README.md
 ├── DEVLOG.md
 ├── TODO.md
@@ -637,7 +691,6 @@ Like any retrieval-based application, Germany Decoded has several current limita
 - The retrieval benchmark currently contains a limited set of representative legal questions.
 - The LLM Judge evaluates answer relevance rather than legal correctness.
 - Conversation history is read-only and is not used as long-term conversation memory.
-- The Python application currently runs locally and is not fully containerized.
 - Some legal questions may require additional official sources that are not yet included in the knowledge base.
 
 These limitations also represent opportunities for future development.
@@ -670,7 +723,6 @@ Planned improvements include:
 
 ## Infrastructure
 
-- Fully containerize the application.
 - Deploy the application publicly.
 - Add OpenTelemetry tracing.
 - Add production observability dashboards.

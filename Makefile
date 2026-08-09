@@ -1,36 +1,52 @@
+setup:
+	docker compose build
+	docker compose up -d postgres
+	docker compose run --rm app python -m germany_decoded.db.init
+	docker compose run --rm app python -m germany_decoded.index
+	docker compose up -d app
+
+build:
+	docker compose build
+
 up:
 	docker compose up -d
 
 down:
 	docker compose down
 
+ps:
+	docker compose ps
+
+logs:
+	docker compose logs -f app
+
 psql:
-	docker exec -it germany-decoded-db psql -U admin -d germany_decoded
+	docker compose exec postgres sh -c 'psql -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'
 
 reset-db:
-	uv run python -c "from germany_decoded.db.init import init_db; init_db(drop=True)"
+	docker compose run --rm app python -c "from germany_decoded.db.init import init_db; init_db(drop=True)"
 
 init-db:
-	uv run python -m germany_decoded.db.init
+	docker compose run --rm app python -m germany_decoded.db.init
 
 index:
-	uv run python -m germany_decoded.index
+	docker compose run --rm app python -m germany_decoded.index
 
 cli:
-	uv run python -m germany_decoded.main
+	docker compose run --rm app python -m germany_decoded.main
 
 app:
-	uv run streamlit run app.py
+	docker compose up -d app
 
 eval-retrieval:
-	uv run python -m germany_decoded.evaluation.retrieval_eval
+	docker compose run --rm app python -m germany_decoded.evaluation.retrieval_eval
 
 eval-judge:
-	uv run python -m germany_decoded.evaluation.judge_eval
+	docker compose run --rm app python -m germany_decoded.evaluation.judge_eval
 
 eval-all:
 	$(MAKE) eval-retrieval
 	$(MAKE) eval-judge
 
 debug-retrieval:
-	uv run python -m germany_decoded.evaluation.debug_retrieval
+	docker compose run --rm app python -m germany_decoded.evaluation.debug_retrieval
