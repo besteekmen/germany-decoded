@@ -523,6 +523,25 @@ def admin_page():
                     x_label="Judge Result",
                     y_label="Conversations",
                 )
+            
+        with st.container(border=True):
+            st.markdown("#### Questions Over Time")
+
+            questions_over_time = (
+                chart_df
+                .set_index("Created")
+                .resample("D")
+                .size()
+                .reset_index(name="Questions")
+            )
+
+            st.line_chart(
+                questions_over_time,
+                x="Created",
+                y="Questions",
+                x_label="Date",
+                y_label="Questions",
+            )
 
     else:
         st.info("Charts will appear after conversations are recorded.")

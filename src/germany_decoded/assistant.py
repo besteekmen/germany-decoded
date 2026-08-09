@@ -1,7 +1,7 @@
 import time
 from dotenv import load_dotenv
 from openai import OpenAI
-from germany_decoded.retrieval import search
+from germany_decoded.retrieval import search_hybrid
 from germany_decoded.metrics import ConversationRecord, calculate_cost
 from germany_decoded.db.conversation import save_conversation
 
@@ -85,7 +85,7 @@ class Assistant:
         }
 
     def search(self, question, top_k=3):
-        return search(question, top_k=top_k)
+        return search_hybrid(question, top_k=top_k)
 
     def build_context(self, results):
         """
