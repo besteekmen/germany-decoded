@@ -20,7 +20,7 @@ Final project for the **DataTalks.Club LLM Zoomcamp 2026**.
 - 🧠 Query Rewriting from English to German legal terminology
 - 🤖 GPT-5 Mini grounded answer generation
 - 📚 Official legal source references
-- 📊 Retrieval benchmark evaluation (Hit@K)
+- 📊 Retrieval benchmark evaluation (Hit@K + MRR)
 - ⚖️ LLM-as-a-Judge evaluation
 - 💬 Conversation history
 - 👍 User feedback collection
@@ -298,10 +298,13 @@ Two retrieval strategies were evaluated:
 | Hit@1 | **40%** | 30% |
 | Hit@3 | 40% | **70%** |
 | Hit@5 | 50% | **70%** |
+| MRR | 0.420 | **0.483** |
 
-Although semantic retrieval produced a slightly higher Hit@1 score, hybrid retrieval substantially improved retrieval coverage for the top three and top five results.
+Semantic retrieval achieved a higher Hit@1 score, but hybrid retrieval performed substantially better at Hit@3 and Hit@5 and also achieved a higher MRR.
 
-Since multiple retrieved documents are passed to the LLM, improving Hit@3 and Hit@5 resulted in better overall answer quality. Therefore, **Hybrid Retrieval** was selected as the default retrieval strategy.
+Because the production assistant passes the top 3 retrieved documents to the LLM, **Hit@3 is used as the primary selection metric**. Hybrid retrieval achieved 70% Hit@3 compared with 40% for semantic retrieval.
+
+Therefore, **Hybrid Retrieval** was selected as the production retrieval strategy.
 
 ---
 
@@ -380,7 +383,7 @@ The following table summarizes how Germany Decoded satisfies the LLM Zoomcamp pr
 | Knowledge Base | Official German Civil Code (BGB) |
 | Retrieval Flow | Hybrid Retrieval (Semantic + PostgreSQL Full Text Search) |
 | LLM | GPT-5 Mini |
-| Retrieval Evaluation | Semantic vs Hybrid retrieval benchmark with Hit@1 / Hit@3 / Hit@5 |
+| Retrieval Evaluation | Semantic vs Hybrid benchmark with Hit@1 / Hit@3 / Hit@5 / MRR |
 | LLM Evaluation | Offline LLM-as-a-Judge |
 | Interface | Streamlit application |
 | Ingestion Pipeline | Automated Python ingestion and indexing pipeline |

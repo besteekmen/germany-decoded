@@ -7,7 +7,7 @@
 - [x] Configure environment variables
 - [x] Create project structure
 - [x] Add project documentation
-- [x] Configure Docker + PostgreSQL
+- [x] Fully containerize application + PostgreSQL with Docker Compose
 - [x] Configure pgvector
 - [x] Create Makefile
 
@@ -59,6 +59,7 @@
 - [x] Store user feedback
 - [x] Build monitoring dashboard
 - [x] Build admin dashboard
+- [x] Add 5 monitoring charts
 
 ---
 
@@ -66,12 +67,16 @@
 
 - [x] Build benchmark dataset
 - [x] Retrieval evaluation
+- [x] Compare semantic vs hybrid retrieval
+- [x] Evaluate Hit@1 / Hit@3 / Hit@5 / MRR
+- [x] Select best retrieval approach for production
 - [x] Build retrieval debugger
 - [x] Hybrid search (semantic + keyword)
 - [x] PostgreSQL Full Text Search
+- [x] Query rewriting
 - [x] LLM-as-a-Judge
+- [ ] Compare multiple RAG prompt approaches
 - [ ] Experiment with chunking
-- [ ] Improve prompts
 - [ ] Reranking
 
 ---

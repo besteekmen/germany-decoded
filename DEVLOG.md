@@ -184,7 +184,7 @@ Created an admin interface for inspecting:
 
 Retrieval quality is critical for RAG systems.
 
-A good answer depends on retrieving the correct legal documents first.
+A good answer depends on retrieving the correct legal documents before generation.
 
 Created:
 
@@ -197,12 +197,97 @@ Created:
 
 ## Evaluation Metrics
 
-Implemented Hit@K evaluation.
+The retrieval benchmark uses:
 
-Example:
+- Hit@1
+- Hit@3
+- Hit@5
+- Mean Reciprocal Rank (MRR)
 
-Question:
+Hit@K measures whether the expected legal section appears within the first K retrieved documents.
 
-> Can I reduce my rent because of mold?
+MRR also considers how highly the correct section is ranked.
 
-Expected:
+Because the production assistant passes the top 3 retrieved documents to the LLM, Hit@3 is used as the primary retrieval-selection metric.
+
+---
+
+# Session 7 — Hybrid Retrieval and Query Rewriting
+
+## Hybrid Search
+
+The initial retrieval system used semantic vector search only.
+
+To improve retrieval of exact legal terminology and section-specific language, PostgreSQL Full Text Search was added.
+
+Hybrid retrieval combines:
+
+- semantic search using multilingual embeddings,
+- PostgreSQL Full Text Search,
+- LLM-based rewriting of English user questions into short German legal search terms.
+
+The semantic and keyword scores are combined to produce the final ranking.
+
+---
+
+## Retrieval Comparison
+
+Semantic and hybrid retrieval were evaluated on the same benchmark.
+
+| Metric | Semantic | Hybrid |
+|:------:|---------:|-------:|
+| Hit@1 | 40% | 30% |
+| Hit@3 | 40% | 70% |
+| Hit@5 | 50% | 70% |
+| MRR | 0.420 | 0.483 |
+
+Semantic retrieval performed better at Hit@1, but hybrid retrieval substantially improved Hit@3, Hit@5, and MRR.
+
+Since the production assistant uses the top 3 retrieved documents as context, hybrid retrieval was selected as the production strategy.
+
+---
+
+# Session 8 — Monitoring Improvements
+
+The monitoring dashboard was expanded to satisfy both operational needs and project evaluation requirements.
+
+The dashboard now includes five charts:
+
+1. Response Time
+2. Token Usage
+3. Feedback Distribution
+4. LLM Judge Distribution
+5. Questions Over Time
+
+User thumbs-up and thumbs-down feedback continues to be stored in PostgreSQL.
+
+The Admin Dashboard therefore provides both user feedback collection and visual monitoring of system behavior.
+
+---
+
+# Session 9 — Full Docker Containerization
+
+## Previous Setup
+
+Initially, Docker Compose was used only for PostgreSQL/pgvector while the Python application, indexing pipeline, and evaluations ran directly in the local WSL environment.
+
+## Updated Architecture
+
+The project was fully containerized using:
+
+- `Dockerfile` for the Python/Streamlit application,
+- Docker Compose for the application and PostgreSQL/pgvector,
+- a persistent PostgreSQL volume,
+- a Hugging Face model cache volume.
+
+The application connects to PostgreSQL through the Docker Compose service hostname `postgres`.
+
+The Makefile was updated so database initialization, indexing, CLI execution, Streamlit, and evaluation commands can all run inside the application container.
+
+A fresh environment can now be prepared with:
+
+```bash
+make setup
+```
+
+This builds the application image, starts PostgreSQL, initializes the database, indexes the BGB knowledge base, and starts Streamlit.
