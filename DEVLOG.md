@@ -291,3 +291,17 @@ make setup
 ```
 
 This builds the application image, starts PostgreSQL, initializes the database, indexes the BGB knowledge base, and starts Streamlit.
+
+# Session 10 — RAG Prompt Evaluation
+
+Two generation prompts were evaluated while keeping retrieval and the
+retrieved context identical.
+
+| Prompt | Relevant | Partly Relevant | Not Relevant | Score |
+|:------:|---------:|----------------:|-------------:|------:|
+| V1 | 6 | 4 | 0 | 80% |
+| V2 | 5 | 5 | 0 | 75% |
+
+The existing V1 prompt performed better and was retained as the production
+prompt. This experiment showed that adding more explicit instructions did
+not automatically improve answer relevance.

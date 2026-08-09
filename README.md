@@ -21,7 +21,7 @@ Final project for the **DataTalks.Club LLM Zoomcamp 2026**.
 - 🤖 GPT-5 Mini grounded answer generation
 - 📚 Official legal source references
 - 📊 Retrieval benchmark evaluation (Hit@K + MRR)
-- ⚖️ LLM-as-a-Judge evaluation
+- ⚖️ RAG prompt evaluation with LLM-as-a-Judge
 - 💬 Conversation history
 - 👍 User feedback collection
 - 📈 Monitoring dashboard with charts
@@ -281,6 +281,7 @@ The evaluator measures:
 - **Hit@1** – the expected section appears as the top result.
 - **Hit@3** – the expected section appears within the first three retrieved documents.
 - **Hit@5** – the expected section appears within the first five retrieved documents.
+- **MRR** – rewards retrieval methods that rank the expected legal section higher.
 
 ### Retrieval Approaches
 
@@ -344,6 +345,32 @@ Because judging is performed **offline**, it does not increase latency or API co
 
 ---
 
+## RAG Prompt Evaluation
+
+Two answer-generation prompt strategies were evaluated while keeping the retrieval pipeline, retrieved context, and LLM model identical.
+
+This isolates the effect of the generation instructions rather than mixing prompt and retrieval changes in the same experiment.
+
+### Prompt Variants
+
+- **V1** – the original production prompt.
+- **V2** – a more explicit prompt designed to answer the user's exact question first, distinguish supported conclusions from missing information, and avoid treating related legal provisions as sufficient evidence.
+
+### Results
+
+| Prompt | Relevant | Partly Relevant | Not Relevant | Score |
+|:------:|---------:|----------------:|-------------:|------:|
+| **V1** | **6** | 4 | 0 | **80%** |
+| V2 | 5 | 5 | 0 | 75% |
+
+The original V1 prompt achieved the higher overall score.
+
+Therefore, **V1 was retained as the production prompt**.
+
+This experiment showed that adding more detailed instructions did not automatically improve answer relevance.
+
+---
+
 # 📈 Monitoring
 
 Every user interaction is stored in PostgreSQL.
@@ -384,7 +411,7 @@ The following table summarizes how Germany Decoded satisfies the LLM Zoomcamp pr
 | Retrieval Flow | Hybrid Retrieval (Semantic + PostgreSQL Full Text Search) |
 | LLM | GPT-5 Mini |
 | Retrieval Evaluation | Semantic vs Hybrid benchmark with Hit@1 / Hit@3 / Hit@5 / MRR |
-| LLM Evaluation | Offline LLM-as-a-Judge |
+| LLM Evaluation | Prompt V1 vs V2 comparison using offline LLM-as-a-Judge |
 | Interface | Streamlit application |
 | Ingestion Pipeline | Automated Python ingestion and indexing pipeline |
 | Monitoring | Dashboard, 5 charts, conversation logging, user feedback |
@@ -573,6 +600,12 @@ Run retrieval evaluation:
 make eval-retrieval
 ```
 
+Run the RAG prompt comparison:
+
+```bash
+make eval-rag
+```
+
 Run the offline LLM-as-a-Judge evaluation:
 
 ```bash
@@ -605,9 +638,10 @@ All evaluation commands run inside the application Docker container.
 | `make index` | Build/rebuild the legal knowledge base |
 | `make cli` | Run the console assistant inside Docker |
 | `make app` | Launch the Streamlit application |
-| `make eval-all` | Run both evaluation pipelines |
-| `make eval-retrieval` | Run retrieval evaluation |
-| `make eval-judge` | Run LLM-as-a-Judge |
+| `make eval-all` | Run retrieval, RAG prompt, and judge evaluations |
+| `make eval-retrieval` | Compare semantic and hybrid retrieval |
+| `make eval-rag` | Compare RAG prompt V1 vs V2 |
+| `make eval-judge` | Evaluate stored conversations with LLM-as-a-Judge |
 | `make debug-retrieval` | Debug retrieval results |
 
 ---
@@ -666,6 +700,7 @@ germany-decoded/
         │
         └── evaluation/
             ├── retrieval_eval.py
+            ├── rag_eval.py
             ├── judge_eval.py
             ├── debug_retrieval.py
             └── retrieval_benchmark.json

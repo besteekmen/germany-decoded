@@ -44,9 +44,12 @@ eval-retrieval:
 eval-judge:
 	docker compose run --rm app python -m germany_decoded.evaluation.judge_eval
 
+eval-rag:
+	docker compose run --rm app python -m germany_decoded.evaluation.rag_eval
+
 eval-all:
 	$(MAKE) eval-retrieval
+	$(MAKE) eval-rag
 	$(MAKE) eval-judge
-
 debug-retrieval:
 	docker compose run --rm app python -m germany_decoded.evaluation.debug_retrieval

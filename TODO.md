@@ -75,7 +75,8 @@
 - [x] PostgreSQL Full Text Search
 - [x] Query rewriting
 - [x] LLM-as-a-Judge
-- [ ] Compare multiple RAG prompt approaches
+- [x] Compare multiple RAG prompt approaches
+- [x] Select best RAG prompt for production
 - [ ] Experiment with chunking
 - [ ] Reranking
 
